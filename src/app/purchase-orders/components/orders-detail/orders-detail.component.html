@@ -1,0 +1,82 @@
+<div class="container">
+
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Purchase Orders /</span> Detail Purchase Order
+    </h4>
+    <ul class="nav nav-pills flex-column flex-md-row mb-3">
+        <li class="nav-item " >
+            <a class="nav-link active" routerLink="../../list"><i class='bx bx-arrow-back me-2'></i>Back</a>
+        </li>
+    </ul>
+    <div class="card mb-4">
+        <div class="card-header row">
+            <div class="col-sm-6 mt-2">
+                <h3 class="text-primary">PURCHASE ORDER</h3>
+                <p>Purchase order# - {{order.id}}</p>
+            </div>
+            <div class="col-sm-6 mt-2">
+                <div class="d-flex justify-content-sm-end">
+                    <div>
+                        <h5 class="text-primary">Info Reception</h5>
+                        <p>{{order.info}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-0" />
+        <div class="card-body row">
+            <div class="col-sm-6 mt-2">
+                <h5 class="text-primary">Deliver By</h5>
+                <p>{{provider.compName}} </p>
+                <p>{{provider.address.street}} {{provider.address.number}}</p>
+                <p>{{provider.address.province}}, {{provider.address.country}}</p>
+    
+            </div>
+            <div class="col-sm-6 mt-2">
+                <div class="d-flex justify-content-sm-end ">
+                    <div>
+                        <div class="d-flex align-items-baseline justify-content-sm-end">
+                            <h5 class="text-primary me-2">Date Issue:</h5>
+                            <p>{{order.dateE}} </p>
+                        </div>
+                        <div class="d-flex align-items-baseline justify-content-sm-end">
+                            <h5 class="text-primary me-2">Expected delivery date:</h5>
+                            <p>{{order.dateR}} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-0" />
+        <div class="card-footer">
+            <div class="table-responsive text-nowrap m-3">
+                <table class="table  ">
+                    <thead>
+                        <tr class="text-center"> 
+                            <th>Code</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="grillaProd">
+                        <tr *ngFor="let p of order.products" class="text-center">
+                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>{{p.id}}</strong>
+                            </td>
+                            <td>{{p.name}}</td>
+                            <td>{{p.quantity}}</td>
+                            <td>{{p.price}}</td>
+                            <td>${{p.price*p.quantity}}</td>
+                        </tr>
+                        <tr id="" class="bg-primary text-white">
+                            <td colspan="4" class="text-white">Total:</td>
+                            <td id="total" class="text-white text-center">${{order.total}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

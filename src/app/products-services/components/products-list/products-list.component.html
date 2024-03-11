@@ -1,0 +1,210 @@
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Products-Services /</span> List of Products-Services
+</h4>
+<ul class="nav nav-pills flex-column flex-md-row mb-3">
+    <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> List of
+            Products-Services</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLink="../add"><i class="bx bx-plus me-1"></i> Add
+            Product-Service</a>
+    </li>
+</ul>
+<div class="card">
+    <div class="card-body">
+        <div class="input-group">
+            <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                <option selected>Provider</option>
+                <option value="1">Provider 1</option>
+                <option value="2">Provider 2</option>
+                <option value="3">Provider 3</option>
+            </select>
+            <input type="search" class="form-control" aria-label="Text input with dropdown button" />
+        </div>
+        <div class="table-responsive text-nowrap m-3" *ngIf="products.length>0">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Branch</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0" id="grillaProd">
+                    <tr *ngFor="let p of products">
+                        <td>
+                            <img src="{{p.imageP}}" alt="Product Image" width="100">
+                        </td>
+                        <td>{{p.description}}</td>
+                        <td><span class="badge bg-label-primary me-1">{{p.idCategory}}</span></td>
+                        <td><span class="badge bg-label-primary me-1">{{p.idBranch}}</span></td>
+                        <td>
+                            <button class="dropdown-item" type="button" routerLink="../detail/{{p.id}}"><i class="bx bx-info-circle me-1"></i>
+                                Info</button>
+                            <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#modalEdit" (click)="editProd(p)"><i class="bx bx-edit-alt me-1"></i>
+                                Edit</button>
+                            <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#modalCenter" (click)="checkDelete(p.id)"><i
+                                    class="bx bx-trash me-1"></i> Delete</button>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="products.length==0">
+            <div class="alert alert-primary d-flex align-items-center justify-content-between mt-2" role="alert">
+                <div class="d-flex">
+                    <i class='bx bx-info-circle me-2'></i>
+                    <div>
+                        There are no products to show, do you want to add one?
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary d-flex align-items-center" routerLink="../add">
+                        <i class='bx bx-plus-circle me-1'></i>
+                        <div>
+                            Add Product
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Do you want to delete the Product?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger ms-2" id="btnBorrado" data-bs-dismiss="modal"
+                    (click)="deleteProd()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEdit">Do you want to edit the Product?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEdit" [formGroup]="myFormReactivo" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label for="code" class="form-label">Product Code</label>
+                            <input class="form-control" type="text" id="code" name="code" placeholder="001" autofocus
+                                formControlName="code" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('code')?.hasError('required')">Code is
+                                required.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('code')?.hasError('minlength')">Must
+                                be at least 4
+                                characters long.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="description" rows="3"
+                                formControlName="description"></textarea>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('description')?.hasError('required')">Description is
+                                required.</small>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('description')?.hasError('minlength')">Must
+                                be at least 4
+                                characters long..</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" aria-label="Default select example"
+                                formControlName="category">
+                                <option value="">Select Category</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Smart Home">Smart Home</option>
+                                <option value="Music">Music</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Vehicles">Vehicles</option>
+                            </select>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('category')?.hasError('required')">Category is
+                                required.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="branch" class="form-label">Branch</label>
+                            <select class="form-select" id="branch" aria-label="Default select example"
+                                formControlName="branch">
+                                <option value="">Select branch</option>
+                                <option value="Lacoste">Lacoste</option>
+                                <option value="Nike">Nike</option>
+                                <option value="La Argentina">La Argentina</option>
+                                <option value="Kevingstone">Kevingstone</option>
+                            </select>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('branch')?.hasError('required')">Branch is
+                                required.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="cost" class="form-label">Cost</label>
+                            <input type="number" class="form-control" id="cost" name="cost" placeholder="$200"
+                                formControlName="cost" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cost')?.hasError('required')">cost
+                                is
+                                required.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cost')?.hasError('min')">Must be at
+                                least 1.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cost')?.hasError('max')">must be
+                                less than 10000000.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="revenue" class="form-label">Revenue</label>
+                            <input type="number" class="form-control" id="revenue" name="revenue" placeholder="$200"
+                                formControlName="revenue" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('revenue')?.hasError('required')">Revenue
+                                is
+                                required.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('revenue')?.hasError('min')">Must be at
+                                least 1.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('revenue')?.hasError('max')">must be
+                                less than 10000000.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="imageP" class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="imageP" name="imageP"
+                                placeholder="https://exaple.png|jpg|jpeg|gif|webp" formControlName="imageP" />
+                            <img src="{{myFormReactivo.value.imageP? myFormReactivo.value.imageP :'../../../../assets/img/elements/4.jpg'}}"
+                                alt="user-avatar" class="d-block rounded mt-2" height="100" width="100"
+                                id="uploadedAvatar" />
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('imageP')?.hasError('pattern')">Invalid URL
+                                format.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('imageP')?.hasError('required')">Image
+                                is
+                                required</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Apply Changes</button>&nbsp;
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ng-template #editTpl> Product successfully edited! </ng-template>
+<app-toasts-edit aria-live="polite" aria-atomic="true"></app-toasts-edit>

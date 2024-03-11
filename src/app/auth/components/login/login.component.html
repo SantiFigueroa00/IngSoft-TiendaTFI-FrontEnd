@@ -1,0 +1,58 @@
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <div class="card">
+        <div class="card-body">
+          
+          <div class="app-brand justify-content-center">
+            <a class="app-brand-link gap-2">
+              <span class="app-brand-text demo text-body fw-bolder">Tu Tiendita</span>
+            </a>
+          </div>
+          
+          <h4 class="mb-2">Bienvenido a Tu Tiendita! 👋</h4>
+          <p class="mb-4">Por favor inicia sesión y comienza la aventura!</p>
+
+          <form id="formAuthentication" class="mb-3" [formGroup]="myFormReactivo" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email o Usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                name="email-username"
+                placeholder="Enter your email or username"
+                autofocus
+                formControlName="email"
+              />
+            </div>
+            <div class="mb-3 form-password-toggle">
+              <div class="input-group input-group-merge">
+                <input
+                  [type]="changetype?'password':'text'"
+                  id="password"
+                  class="form-control"
+                  name="password"
+                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                  aria-describedby="password"
+                  formControlName="password"
+                />
+                <span class="input-group-text cursor-pointer" (click)="viewpass()" ><i [ngClass]="visible?'bx bx-hide':'bx bx-show '"></i></span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remember-me" />
+                <label class="form-check-label" for="remember-me"> Remember Me </label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+            </div>
+          </form>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</div>

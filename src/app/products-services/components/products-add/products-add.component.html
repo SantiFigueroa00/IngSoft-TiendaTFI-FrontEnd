@@ -1,0 +1,126 @@
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Products-Services /</span> List of Products-Services
+</h4>
+<ul class="nav nav-pills flex-column flex-md-row mb-3">
+    <li class="nav-item">
+        <a class="nav-link " routerLink="../list"><i class="bx bx-user me-1"></i> List of
+            Products-Services</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-plus me-1"></i> Add
+            Product-Service</a>
+    </li>
+</ul>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header">Product/Service Detail</h5>
+            <!-- Account -->
+            <hr class="my-0" />
+            <div class="card-body">
+                <form id="formProd" [formGroup]="myFormReactivo" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label for="code" class="form-label">Product Code</label>
+                            <input class="form-control" type="text" id="code" name="code" placeholder="001" autofocus
+                                formControlName="code" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('code')?.hasError('required')">Code is
+                                required.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('code')?.hasError('minlength')">Must
+                                be at least 4
+                                characters long.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="description" rows="3"
+                                formControlName="description"></textarea>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('description')?.hasError('required')">Description is
+                                required.</small>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('description')?.hasError('minlength')">Must
+                                be at least 4
+                                characters long..</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" aria-label="Default select example"
+                                formControlName="category">
+                                <option value="">Select Category</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Smart Home">Smart Home</option>
+                                <option value="Music">Music</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Vehicles">Vehicles</option>
+                            </select>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('category')?.hasError('required')">Category is
+                                required.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="branch" class="form-label">Branch</label>
+                            <select class="form-select" id="branch" aria-label="Default select example"
+                                formControlName="branch">
+                                <option value="">Select branch</option>
+                                <option value="Lacoste">Lacoste</option>
+                                <option value="Nike">Nike</option>
+                                <option value="La Argentina">La Argentina</option>
+                                <option value="Kevingstone">Kevingstone</option>
+                            </select>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('branch')?.hasError('required')">Branch is
+                                required.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="cost" class="form-label">Cost</label>
+                            <input type="number" class="form-control" id="cost" name="cost" placeholder="$200"
+                                formControlName="cost" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cost')?.hasError('required')">cost
+                                is
+                                required.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cost')?.hasError('min')">Must be at
+                                least 1.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cost')?.hasError('max')">must be
+                                less than 10000000.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="revenue" class="form-label">Revenue</label>
+                            <input type="number" class="form-control" id="revenue" name="revenue" placeholder="$200"
+                                formControlName="revenue" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('revenue')?.hasError('required')">Revenue
+                                is
+                                required.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('revenue')?.hasError('min')">Must be at
+                                least 1.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('revenue')?.hasError('max')">must be
+                                less than 10000000.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="imageP" class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="imageP" name="imageP"
+                                placeholder="https://exaple.png|jpg|jpeg|gif|webp" formControlName="imageP" />
+                            <img src="{{myFormReactivo.value.imageP? myFormReactivo.value.imageP :'../../../../assets/img/elements/4.jpg'}}"
+                                alt="user-avatar" class="d-block rounded mt-2" height="100" width="100"
+                                id="uploadedAvatar" />
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('imageP')?.hasError('pattern')">Invalid URL
+                                format.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('imageP')?.hasError('required')">Image
+                                is
+                                required</small>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2">Add Product</button>
+                        <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<ng-template #successTpl> Product successfully created! </ng-template>
