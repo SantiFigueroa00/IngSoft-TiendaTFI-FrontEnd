@@ -19,13 +19,12 @@
 
             <hr class="my-0" />
             <div class="card-body">
-                <form id="formCompra" [formGroup]="myFormReactivoOrd" (ngSubmit)="onSubmitOrd()">
                     <div class="row">
                         <div class="mb-3 col-md-12">
                             <label for="floatingInput" class="form-label">Search Product</label>
                             <div class="form-floating custom-input ">
                                 <input type="search" class="form-control" id="floatingInput"
-                                    placeholder="Product Name or Description" aria-describedby="floatingInputHelp" />
+                                    placeholder="Codigo del Producto" aria-describedby="floatingInputHelp" (keyup.enter)="openModal(content)"/>
                                 <label for="floatingInput"><i class="bx bx-search me-1"></i></label>
                             </div>
                             <!-- <small class="text-primary"
@@ -35,9 +34,9 @@
                         <div class="mb-3 col-md-12">
                             <label for="Client" class="form-label">Client</label>
                             <select class="form-select" id="Client" aria-label="Default select example"
-                                formControlName="Client">
-                                <option value="">Select Client</option>
-                                <option value="0">Juancito Perez</option>
+                                [value]="0">
+                                <option value="0" >Cliente por defecto</option>
+                                <option value="default">Juancito Perez</option>
                                 <hr>
                                 <option value="external-link">New Client...</option>
                             </select>
@@ -48,11 +47,12 @@
                     </div>
 
                     <div class="mt-2">
-                        <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal"
+                        <button type="submit" class="btn btn-primary me-2" data-bs-toggle="modal"
                             data-bs-target="#modalAdd"> <i class='bx bx-wallet'></i> Cash Payment</button>
-                        <button type="reset" class="btn btn-outline-secondary"> <i class='bx bx-credit-card'></i> Card Payment</button>
+                        <button type="submit" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                            data-bs-target="#modalTarjeta"> <i class='bx bx-credit-card'></i> Card
+                            Payment</button>
                     </div>
-                </form>
             </div>
 
 
@@ -152,16 +152,16 @@
                     <div class="col-sm-12 mt-2">
                         <div class="row">
                             <div class="col-sm-4">
-                                <h5 class="text-primary mb-1">Branch</h5>
-                                <p class="mb-0">Shopping Portal</p>
+                                <h5 class="text-primary mb-1">Sucursal</h5>
+                                <p class="mb-0">{{sesion.puntoDeVenta.sucursal.nombre}}</p>
                             </div>
                             <div class="col-sm-4">
-                                <h5 class="text-primary mb-1">Point of sale</h5>
-                                <p class="mb-0"># 123</p>
+                                <h5 class="text-primary mb-1">Punto de Venta</h5>
+                                <p class="mb-0">{{sesion.puntoDeVenta.nombre}}</p>
                             </div>
                             <div class="col-sm-4">
-                                <h5 class="text-primary mb-1">Sold by</h5>
-                                <p class="mb-0">Pedrito Gomez</p>
+                                <h5 class="text-primary mb-1">Vendedor</h5>
+                                <p class="mb-0">{{sesion.vendedor.nombre+' '+sesion.vendedor.apellido}}</p>
                             </div>
                         </div>
                     </div>
@@ -246,11 +246,11 @@
 <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEdit">Do you want to Edit the Product?</h5>
+                <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <form id="formModal" [formGroup]="myFormReactivoProd" (ngSubmit)="onSubmitProd()">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalEdit">Do you want to Edit the Product?</h5>
-                    <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-3 col-md-6">
@@ -282,7 +282,7 @@
                                 than 1000.</small>
                         </div>
                     </div>
-                </div>
+                </div> 
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Cancel
@@ -293,6 +293,98 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalTarjeta" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Detalle de Pago</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formCompra" [formGroup]="myFormReactivoPago" (ngSubmit)="onSubmitPago()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="mb-3 col-md-12">
+                            <label for="nombre" class="form-label">Nombre y Apellido (Como figura en la tarjeta)</label>
+                            <input type="text" id="nombre" class="form-control" placeholder="Juancito Perez"
+                                formControlName="nombre">
+                            <!-- <small class="text-primary"
+                                            *ngIf="myFormReactivo.get('nombre')?.hasError('required')">nombre is
+                                            required.</small> -->
+                        </div>
+                        <div class="mb-3 col-md-12">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="text" id="dni" class="form-control" placeholder="43211234"
+                                formControlName="dni">
+                            <!-- <small class="text-primary"
+                                            *ngIf="myFormReactivo.get('dni')?.hasError('required')">dni is
+                                            required.</small> -->
+                        </div>
+                        <div class="mb-3 col-md-12">
+                            <label for="numeroTarjeta" class="form-label">Numero de Tarjeta</label>
+                            <input type="number" id="numeroTarjeta" class="form-control"
+                                placeholder="1111 - 2222 - 3333 - 4444" formControlName="numeroTarjeta">
+                            <!-- <small class="text-primary"
+                                            *ngIf="myFormReactivo.get('numeroTarjeta')?.hasError('required')">numeroTarjeta is
+                                            required.</small> -->
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col mb-0">
+
+                            <label for="diaVenc" class="form-label">Vencimiento</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="diaVenc" formControlName="diaVenc" placeholder="Mes">
+                                <input type="number" class="form-control" id="mesVenc" formControlName="mesVenc" placeholder="Año">
+                            </div>
+
+
+                            
+                        </div>
+                        <div class="col mb-0">
+                            <label for="codSeg" class="form-label">CVV</label>
+                            <input id="codSeg" type="number" class="form-control" formControlName="codSeg" placeholder="223">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar Datos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Producto</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Tipo de Talle</th>
+                        <th>Talle</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr (dblclick)="onRowDoubleClick(); modal.close('doble click')" >
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <span class="fw-medium">AR</span></td>
+                        <td>M</td>
+                        <td>
+                            Azul
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 <ng-template #successTpl> Purchase Order successfully created! </ng-template>

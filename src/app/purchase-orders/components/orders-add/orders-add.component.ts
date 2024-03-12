@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
 import { v4 as uuidv4, v4 } from 'uuid';
@@ -9,6 +9,7 @@ import { Order } from '../../../models/Order';
 import { OrdersService } from '../../services/orders.service';
 import { ToastServiceSuccess } from '../../../shared/components/toast/toast-success/toast-service';
 import { Sesion } from '../../../models/Sesion';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-orders-add',
@@ -16,9 +17,14 @@ import { Sesion } from '../../../models/Sesion';
   styleUrl: './orders-add.component.css',
 })
 export class OrdersAddComponent  {
+
+
   @ViewChild('successTpl') successTpl!: TemplateRef<any>;
 
   sesion: Sesion = JSON.parse(localStorage.getItem('sesion')!);
+
+  modalService = inject(NgbModal);
+
   providers: Provider[] = [];
   products: Product[] = [];
   productsOrder: {
@@ -50,7 +56,7 @@ export class OrdersAddComponent  {
   
   // REACTIVE FORM
   myFormReactivoProd: FormGroup;
-  myFormReactivoOrd: FormGroup;
+  myFormReactivoPago: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -59,21 +65,14 @@ export class OrdersAddComponent  {
     public orderServ: OrdersService,
     public toastServ:ToastServiceSuccess
     ) {
-      
-      const currentDate = new Date();
-      const formattedDate = this.formatDate(currentDate);
-      this.myFormReactivoOrd = this.fb.group({
-        provider: ['', [Validators.required]],
-        address: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(5),
-            Validators.maxLength(100),
-          ],
-        ],
-        dateE: [{ value: formattedDate, disabled: true }, [Validators.required]],
-        dateR: ['', [Validators.required,this.dateValidator]],
+      this.myFormReactivoPago = this.fb.group({
+        nombre: ['', [Validators.required]],
+        dni: ['', [Validators.required]],
+        numeroTarjeta: ['', [Validators.required]],
+        codSeg: ['', [Validators.required]],
+        diaVenc: ['', [Validators.required]],
+        mesVenc: ['', [Validators.required]],
+        
       });
       this.myFormReactivoProd = this.fb.group({
         product: ['', [Validators.required]],
@@ -91,9 +90,9 @@ export class OrdersAddComponent  {
       });
     }
     
-    onSubmitOrd() {
-      if (this.myFormReactivoOrd.valid) {
-        console.log('Formulario válido:', this.myFormReactivoOrd.value);
+    onSubmitPago() {
+      if (this.myFormReactivoPago.valid) {
+        console.log('Formulario válido:', this.myFormReactivoPago.value);
         if(this.productsOrder.length > 0){
           this.mapFormValuesToOrder();
           console.log(this.newOrder)
@@ -101,14 +100,14 @@ export class OrdersAddComponent  {
             console.log(res);
             this.showSuccessToast(this.successTpl);
           });
-          this.myFormReactivoOrd.reset();
+          this.myFormReactivoPago.reset();
           this.productsOrder = [];
           this.total=0;
         }else{
           alert('Debe seleccionar al menos un producto');
         }
       } else {
-        console.log('form invalido:', this.myFormReactivoOrd.value);
+        console.log('form invalido:', this.myFormReactivoPago.value);
       }
     }
 
@@ -129,7 +128,7 @@ export class OrdersAddComponent  {
     selectedProv() {
       this.productsOrder = [];
     this.total = 0;
-    this.providerIdSelect = this.myFormReactivoOrd.get('provider')?.value || '';
+    this.providerIdSelect = this.myFormReactivoPago.get('provider')?.value || '';
     console.log(this.providerIdSelect);
     this.productServ
       .getProductsByIdProvider(this.providerIdSelect)
@@ -138,25 +137,6 @@ export class OrdersAddComponent  {
       });
   }
 
-
-  formatDate(date: Date): string {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${year}-${month}-${day}`;
-  }
-
-  dateValidator(control: AbstractControl): ValidationErrors | null {
-    const currentDate = new Date();
-    const selectedDate = new Date(control.value);
-  
-    if (selectedDate < currentDate) {
-      return { pastDate: true };
-    }
-  
-    return null;
-  }
 
   mapFormValuesToProduct() {
     const prodId = this.myFormReactivoProd.get('product')?.value || '';
@@ -205,10 +185,10 @@ export class OrdersAddComponent  {
   }
   mapFormValuesToOrder() {
     this.newOrder.id = v4().slice(0,10)
-    this.newOrder.dateE = this.myFormReactivoOrd.get('dateE')?.value || '';
-    this.newOrder.dateR = this.myFormReactivoOrd.get('dateR')?.value || '';
-    this.newOrder.info = this.myFormReactivoOrd.get('address')?.value || '';
-    this.newOrder.provider = this.myFormReactivoOrd.get('provider')?.value || '';
+    this.newOrder.dateE = this.myFormReactivoPago.get('dateE')?.value || '';
+    this.newOrder.dateR = this.myFormReactivoPago.get('dateR')?.value || '';
+    this.newOrder.info = this.myFormReactivoPago.get('address')?.value || '';
+    this.newOrder.provider = this.myFormReactivoPago.get('provider')?.value || '';
     this.newOrder.products = this.productsOrder;
     this.newOrder.total = this.total
     this.newOrder.state = true;
@@ -237,5 +217,14 @@ export class OrdersAddComponent  {
       (acc, curr) => acc + curr.price * curr.quantity,
       0
     );
+  }
+
+  openModal(content: TemplateRef<any>) {
+    
+    this.modalService.open(content); 
+  }
+
+  onRowDoubleClick() {
+    console.log("llego");
   }
 }
