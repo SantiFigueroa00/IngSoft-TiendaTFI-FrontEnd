@@ -1,0 +1,74 @@
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Clientes /</span> Nuevo Cliente
+</h4>
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item">
+                <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-plus me-1"></i> Añadir Cliente</a>
+            </li>
+        </ul>
+        <div class="card mb-4">
+            <h5 class="card-header">Datos del Cliente</h5>
+            <!-- Account -->
+            <form [formGroup]="myFormReactivo" (ngSubmit)="onSubmit()">
+                <hr class="my-0" />
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input class="form-control" type="text" id="nombre" name="nombre" placeholder="Esteban"
+                                formControlName="nombre" />
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('nombre')?.hasError('required')">Nombre es requerido.</small>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('nombre')?.hasError('minlength')">Debe tener al menos 4 caracteres.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input class="form-control" type="text" id="apellido" name="apellido" placeholder="Quito"
+                                formControlName="apellido" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('apellido')?.hasError('required')">Apellido es requerido.</small>
+                            <small class="text-primary" *ngIf="myFormReactivo.get('apellido')?.hasError('minlength')">Debe tener al menos 4 caracteres.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input class="form-control" type="text" id="dni" name="dni" placeholder="43258852"
+                                formControlName="dni" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('dni')?.hasError('required')">DNI es requerido.</small>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="cuil" class="form-label">CUIL</label>
+                            <input class="form-control" type="text" id="cuil" name="cuil" placeholder="27-43258852-9"
+                                formControlName="cuil" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('cuil')?.hasError('required')">CUIL es requerido.</small>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('cuil')?.hasError('pattern')">Formato de CUIL incorrecto.</small>
+                        </div>            
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="conTrib">Condicion Tributaria</label>
+                            <select id="conTrib" class="select2 form-select" formControlName="conTrib" >
+                                <option value="">Seleccione Condicion Tributaria</option>
+                                <option value="{{i.id}}" *ngFor="let i of condicionesTrib">{{i.descripcion}}</option>
+                            </select>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('conTrib')?.hasError('required')">Condicion Tributaria es requerida.</small>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2">Añadir Cliente</button>
+                        <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+            <!-- /Account -->
+        </div>
+
+    </div>
+</div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<ng-template #successTpl> Provider successfully created! </ng-template>
+
+
+<ng-template #invalidTpl> Invalid form, please check the fields! </ng-template>

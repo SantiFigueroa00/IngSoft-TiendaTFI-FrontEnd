@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, Inject, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ProvidersService } from '../../../providers/services/providers.service';
 import { v4 as uuidv4, v4 } from 'uuid';
@@ -15,6 +15,10 @@ import { EMPTY, catchError } from 'rxjs';
 import { Articulo } from '../../../models/Articulo';
 import { Stock } from '../../../models/Stock';
 import { LineaDeVentaReq } from '../../../models/LineaDeVentaReq';
+import { Router } from '@angular/router';
+import { Cliente } from '../../../models/Cliente';
+import { ClienteService } from '../../../clientes/services/cliente.service';
+import { TarjetaReq } from '../../../models/TarjetaReq';
 
 @Component({
   selector: 'app-orders-add',
@@ -25,22 +29,14 @@ export class OrdersAddComponent  {
 
 
 
+
+
   @ViewChild('successTpl') successTpl!: TemplateRef<any>;
 
   sesion: Sesion = JSON.parse(localStorage.getItem('sesion')!);
 
   modalService = inject(NgbModal);
 
-  providers: Provider[] = [];
-  products: Product[] = [];
-  productsOrder: {
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
-  }[] = [];
-  total: number = 0;
-  providerIdSelect: string = '';
   auxOrder: any={};
   nuevaVenta:Venta={
     id:'',
@@ -56,21 +52,14 @@ export class OrdersAddComponent  {
     total:0,
   };
 
-  flag:boolean=false;
   idEditLinea:string='';
   idProdDelete:string='';
   descripArticuloEdit:string='';
-  editLineaDeVenta:{
-    lineaDeVentaId:string,
-    cantidad:number
-  }={
+  editLineaDeVenta:{lineaDeVentaId:string, cantidad:number}={
     lineaDeVentaId:'',
     cantidad:0
   };
-  borrarLineaDeVenta:{
-    lineaDeVentaId:string,
-    cantidad:number
-  }={
+  borrarLineaDeVenta:{lineaDeVentaId:string, cantidad:number}={
     lineaDeVentaId:'',
     cantidad:0
   };
@@ -89,25 +78,29 @@ export class OrdersAddComponent  {
     precioFinal:0,
     stocks: []
   };
-  aux:Articulo={
-    id:'',
-    codigoArticulo:'',
-    marca:{
-      nombre:'',
-    },
-    categoria:{
-      descripcion:'',
-    },
-    descripcion:'',
-    precioFinal:0,
-    stocks: []
-  };
   stocksBusqueda: Stock[]=[];
+
+  clientes:Cliente[]=[];
+
+  nuevaTarjeta:TarjetaReq={
+    numeroTarjeta:'',
+    mesExpiracion:0,
+    anioExpiracion:0,
+    codigoDeSeguridad:0,
+    nombreTitular:'',
+    apellidoTitular:'', 
+    dniTitular:''
+  }
 
   // REACTIVE FORM
   myFormReactivoProd: FormGroup;
   myFormReactivoPago: FormGroup;
+  myFormReactivoEfectivo: FormGroup;
   
+
+  router = inject(Router)
+
+  clienteServ = inject(ClienteService);
   
 
   constructor(
@@ -119,11 +112,12 @@ export class OrdersAddComponent  {
     ) {
       this.myFormReactivoPago = this.fb.group({
         nombre: ['', [Validators.required]],
+        apellido: ['', [Validators.required]],
         dni: ['', [Validators.required]],
         numeroTarjeta: ['', [Validators.required]],
         codSeg: ['', [Validators.required]],
-        diaVenc: ['', [Validators.required]],
         mesVenc: ['', [Validators.required]],
+        anioVenc: ['', [Validators.required]],
         
       });
       this.myFormReactivoProd = this.fb.group({
@@ -132,6 +126,14 @@ export class OrdersAddComponent  {
           [Validators.required, Validators.max(1000), Validators.min(1)],
         ],
       });
+      this.myFormReactivoEfectivo = this.fb.group({
+        monto: [
+          '',
+          [Validators.required, Validators.min(1)],
+        ],
+        vuelto:[{ value: '', disabled: true }]
+      });
+
     }
 
     ngOnInit(): void {
@@ -144,6 +146,11 @@ export class OrdersAddComponent  {
       ).subscribe(res=>{
         console.log(res);
         this.nuevaVenta=res;
+      });
+
+      this.clienteServ.obtenerClientes().subscribe(res=>{
+        console.log(res);
+        this.clientes=res.clientes;
       })
     }
     
@@ -155,6 +162,28 @@ export class OrdersAddComponent  {
     }
 
     onSubmitPago() {
+      if (this.myFormReactivoPago.valid) {
+        console.log('Formulario válido:', this.myFormReactivoPago.value);
+        this.mapFormValuesToTarjeta();
+
+        this.orderServ.pagoTarjeta(this.nuevaVenta.id,this.nuevaTarjeta).subscribe(res=>{
+          console.log(res);
+          this.myFormReactivoPago.reset();
+          this.mostrarVentaActual();
+        });
+      } else {
+        console.log('form invalido:', this.myFormReactivoPago.value);
+      }
+    }
+
+    mapFormValuesToTarjeta() {
+      this.nuevaTarjeta.numeroTarjeta = this.myFormReactivoPago.get('numeroTarjeta')?.value || '';
+      this.nuevaTarjeta.mesExpiracion = this.myFormReactivoPago.get('mesVenc')?.value || 0;
+      this.nuevaTarjeta.anioExpiracion = this.myFormReactivoPago.get('anioVenc')?.value || 0;
+      this.nuevaTarjeta.codigoDeSeguridad = this.myFormReactivoPago.get('codSeg')?.value || '';
+      this.nuevaTarjeta.nombreTitular = this.myFormReactivoPago.get('nombre')?.value || '';
+      this.nuevaTarjeta.apellidoTitular = this.myFormReactivoPago.get('apellido')?.value || '';
+      this.nuevaTarjeta.dniTitular = this.myFormReactivoPago.get('dni')?.value || '';
     }
 
     showSuccessToast(template : TemplateRef<any>) {
@@ -228,9 +257,40 @@ export class OrdersAddComponent  {
 
   buscarArticulo() {
     this.orderServ.buscarArticulo(this.filtroBusqueda).subscribe((res:any) => {
-      console.log(res);
-      this.articuloBusqueda=res.articulo;
-      console.log(this.articuloBusqueda);
+      this.articuloBusqueda=res;
     });
+  }
+
+
+  onSelectChange(event: any) {
+    const selectedValue = event.target.value;
+    if (selectedValue === 'external-link') {
+      this.router.navigate(['orders', 'nuevo-cliente']);
+    }
+  }
+
+  onSubmitMonto(modalAdd: TemplateRef<any>) {
+    if (this.myFormReactivoEfectivo.valid) {
+      console.log('Formulario válido:', this.myFormReactivoEfectivo.value);
+      const pago : number = this.myFormReactivoEfectivo.get('monto')?.value;
+
+      console.log(pago);
+      this.orderServ.pagoEfectivo(this.nuevaVenta.id,pago).subscribe(res=>{
+        console.log(res);
+        this.modalService.open(modalAdd,{size:'lg'});
+        this.myFormReactivoEfectivo.reset();
+      });
+    } else {
+      console.log('form invalido:', this.myFormReactivoEfectivo.value);
+    }
+  }
+
+  calcularVuelto() {
+    if(this.myFormReactivoEfectivo.get('monto')?.value>this.nuevaVenta.total){
+      const vuelto = this.myFormReactivoEfectivo.get('monto')?.value - this.nuevaVenta.total;
+      this.myFormReactivoEfectivo.get('vuelto')?.setValue(vuelto);
+    }else{
+      this.myFormReactivoEfectivo.get('vuelto')?.setValue('');
+    }
   }
 }

@@ -3,15 +3,19 @@ import { Injectable } from '@angular/core';
 import { Order } from '../../models/Order';
 import { Observable } from 'rxjs';
 import { LineaDeVentaReq } from '../../models/LineaDeVentaReq';
+import { TarjetaReq } from '../../models/TarjetaReq';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
   
+  
+  
+  
   constructor(private http: HttpClient) { }
   
-  API_URL = 'http://181.110.215.252:5198/venta'
+  API_URL = 'http://181.95.110.179:5198/venta'
   
   
   createOrder(order: Order):Observable<any> {
@@ -95,6 +99,33 @@ export class OrdersService {
     return this.http.patch(this.API_URL+'/'+ventaId+'/lineaDeVenta', borrarLineaDeVenta, httpOptions);
   }
 
+  pagoEfectivo(ventaId: string, pago: number) {
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    console.log(pago)
+    return this.http.patch(this.API_URL+'/'+ventaId+'/pagoEfectivo', {monto: pago}, httpOptions);
+  }
+
+  pagoTarjeta(ventaId: string, nuevaTarjeta: TarjetaReq) {
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+
+    console.log(nuevaTarjeta)
+    return this.http.patch(this.API_URL+'/'+ventaId+'/pagoTarjeta', nuevaTarjeta, httpOptions);
+  }
 
   getOrders() :Observable<any>{
     return this.http.get(this.API_URL);

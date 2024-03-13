@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/components/login/login.component';
 import { RegisterComponent } from './auth/components/register/register.component';
 import { LoginGuard } from './guards/login.guard';
+import { ClienteNuevoComponent } from './clientes/components/cliente-nuevo/cliente-nuevo.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent ,canActivate:[LoginGuard]},
@@ -41,7 +42,8 @@ const routes: Routes = [
     children: [
       { path: 'add', component: OrdersAddComponent },
       { path: 'list', component: OrdersListComponent },
-      { path: 'detail/:id', component: OrdersDetailComponent }
+      { path: 'detail/:id', component: OrdersDetailComponent },
+      { path: 'nuevo-cliente', component: ClienteNuevoComponent } 
     ]
     ,canActivate:[LoginGuard]
   },
