@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Order } from '../../../models/Order';
 import { Provider } from '../../../models/Provider';
 import { ProvidersService } from '../../../providers/services/providers.service';
+import { Venta } from '../../../models/Venta';
 
 @Component({
   selector: 'app-orders-detail',
@@ -11,56 +12,30 @@ import { ProvidersService } from '../../../providers/services/providers.service'
   styleUrl: './orders-detail.component.css'
 })
 export class OrdersDetailComponent implements OnInit{
-  orderId: string|null='';
-  order:Order={
+  ventaId: string='';
+  
+  venta : Venta = {
     id:'',
-    dateE:new Date(),
-    dateR:new Date(),
-    info:'',
-    provider:'',
-    products:[],
+    creadaUtc:new Date,
+    confirmada:false,
+    confirmadaUtc:new Date,
+    vendedor:undefined,
+    puntoDeVenta:undefined,
+    cliente:undefined,
+    tipoDeComprobante:undefined,
+    lineasDeVenta:[],
+    pago:undefined,
     total:0,
-    state:false
   }
-  provider:Provider={
-    id:'',
-    compName:'',
-    item:'',
-    webSite:'',
-    phone:'',
-    email:'',
-    address:{
-      street:'',
-      number:0,
-      zip:'',
-      country:'',
-      province:'',
-      locality:''
-    },
-    taxData:{
-      cuit:'',
-      iva:''
-    },
-    logo:'',
-    contact:{
-      name:'',
-      phone:'',
-      email:'',
-      role:''
-    },
-    orders:[],
-    isDeleted:false
-  }
+
 
   constructor(public orderServ: OrdersService, public providerServ : ProvidersService, private route: ActivatedRoute) { }
   ngOnInit(): void {
-    this.orderId = this.route.snapshot.paramMap.get('id');
-    console.log(this.orderId);
-    this.orderServ.getOrderById(this.orderId).subscribe((res)=>{
-      this.order=res;
-      this.providerServ.getProviderById(this.order.provider).subscribe((res)=>{
-        this.provider=res;
-      })
+    this.ventaId = this.route.snapshot.paramMap.get('id')!;
+    console.log(this.ventaId);
+    
+    this.orderServ.obtenerVentaId(this.ventaId).subscribe(res=>{
+      this.venta=res;
     })
   }
 

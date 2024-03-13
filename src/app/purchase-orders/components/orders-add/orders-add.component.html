@@ -1,27 +1,31 @@
 <h4 class="fw-bold py-3 mb-4">
-    <span class="text-muted fw-light">Sales /</span> New Sale
+    <span class="text-muted fw-light">Ventas /</span> Nueva Venta
 </h4>
 
-<ul class="nav nav-pills flex-column flex-md-row mb-3">
-    <li class="nav-item">
-        <a class="nav-link " routerLink="../list"><i class="bx bx-user me-1"></i> List of Sales</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-plus me-1"></i> Add Purchase
-            Orders</a>
-    </li>
-</ul>
+<div class="d-flex justify-content-between">
+    <ul class="nav nav-pills flex-column flex-md-row mb-3">
+        <li class="nav-item">
+            <a class="nav-link " routerLink="../list"><i class="bx bx-user me-1"></i> Listado de Ventas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-plus me-1"></i> Agregar Venta</a>
+        </li>
+    </ul>
+    <div>
+        <button type="button" class="btn btn-outline-secondary d-flex align-items-center" (click)="cancelarVenta()"> <i class='bx bx-x-circle me-1'></i><span>Cancelar Venta</span></button>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-4">
         <div class="card mb-4 card-form">
-            <h5 class="card-header">New Sale</h5>
+            <h5 class="card-header">Nueva Venta</h5>
 
             <hr class="my-0" />
             <div class="card-body">
                     <div class="row">
                         <div class="mb-3 col-md-12">
-                            <label for="floatingInput" class="form-label">Search Product</label>
+                            <label for="floatingInput" class="form-label">Buscar Producto</label>
                             <div class="form-floating custom-input ">
                                 <input type="search" class="form-control" id="floatingInput"
                                     placeholder="Codigo del Producto" aria-describedby="floatingInputHelp" (keyup.enter)="openModal(content); buscarArticulo()" [(ngModel)]="filtroBusqueda"/>
@@ -32,7 +36,7 @@
                                 required.</small> -->
                         </div>
                         <div class="mb-3 col-md-12">
-                            <label for="Client" class="form-label">Client</label>
+                            <label for="Client" class="form-label">Cliente</label>
                             <select class="form-select" id="Client" aria-label="Default select example"
                                 [value]="0" (change)="onSelectChange($event)">
                                 <option value="{{c.id}}" *ngFor="let c of clientes">{{c.nombre + ' ' + c.apellido}}</option>
@@ -61,22 +65,22 @@
         <div class="card">
             <div class="card-header row">
                 <div class="col-sm-6 mt-2">
-                    <h3 class="text-primary mb-1">NEW SALE</h3>
+                    <h3 class="text-primary mb-1">VENTA</h3>
                     <p># {{nuevaVenta.id}}</p>
                 </div>
                 <div class="col-sm-12 mt-2">
                     <div class="row">
                         <div class="col-sm-4">
                             <h5 class="text-primary mb-1">Sucursal</h5>
-                            <p class="mb-0">{{sesion.puntoDeVenta.sucursal.nombre}}</p>
+                            <p class="mb-0">{{nuevaVenta.puntoDeVenta?.sucursal?.nombre}}</p>
                         </div>
                         <div class="col-sm-4">
                             <h5 class="text-primary mb-1">Punto de Venta</h5>
-                            <p class="mb-0">{{sesion.puntoDeVenta.nombre}}</p>
+                            <p class="mb-0">{{nuevaVenta.puntoDeVenta?.numero}}</p>
                         </div>
                         <div class="col-sm-4">
                             <h5 class="text-primary mb-1">Vendedor</h5>
-                            <p class="mb-0">{{sesion.vendedor.nombre+' '+sesion.vendedor.apellido}}</p>
+                            <p class="mb-0">{{nuevaVenta.vendedor?.nombre+' '+nuevaVenta.vendedor?.apellido}}</p>
                         </div>
                     </div>
                 </div>
@@ -131,10 +135,10 @@
                                 <td>
                                     <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                         data-bs-target="#modalEdit" (click)="editProd(det)"><i
-                                            class="bx bx-edit-alt me-1"></i> Edit</button>
+                                            class="bx bx-edit-alt me-1"></i></button>
                                     <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                         data-bs-target="#modalCenter" (click)="checkDelete(det.id)"><i
-                                            class="bx bx-trash me-1"></i> Delete</button>
+                                            class="bx bx-trash me-1"></i></button>
                                 </td>
                             </tr>
                             <tr id="" class="bg-primary text-white">
@@ -152,7 +156,7 @@
 
 <ng-template #modalAdd let-modal>
     <div class="modal-header ">
-        <h5 class="modal-title" id="modalCenterTitle">Summary</h5>
+        <h5 class="modal-title" id="modalCenterTitle">Resumen</h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 
     </div>
@@ -160,22 +164,22 @@
     <div class="modal-body">
         <div class="card-header row pt-0">
             <div class="col-sm-6 mt-2">
-                <h3 class="text-primary mb-1">NEW SALE</h3>
+                <h3 class="text-primary mb-1">VENTA</h3>
                 <p># {{nuevaVenta.id}}</p>
             </div>
             <div class="col-sm-12 mt-2">
                 <div class="row">
                     <div class="col-sm-4">
                         <h5 class="text-primary mb-1">Sucursal</h5>
-                        <p class="mb-0">{{sesion.puntoDeVenta.sucursal.nombre}}</p>
+                        <p class="mb-0">{{nuevaVenta.puntoDeVenta?.sucursal?.nombre}}</p>
                     </div>
                     <div class="col-sm-4">
                         <h5 class="text-primary mb-1">Punto de Venta</h5>
-                        <p class="mb-0">{{sesion.puntoDeVenta.nombre}}</p>
+                        <p class="mb-0">{{nuevaVenta.puntoDeVenta?.numero}}</p>
                     </div>
                     <div class="col-sm-4">
                         <h5 class="text-primary mb-1">Vendedor</h5>
-                        <p class="mb-0">{{sesion.vendedor.nombre+' '+sesion.vendedor.apellido}}</p>
+                        <p class="mb-0">{{nuevaVenta.vendedor?.nombre+' '+nuevaVenta.vendedor?.apellido}}</p>
                     </div>
                 </div>
             </div>
@@ -240,7 +244,7 @@
             Cancel
         </button>
         <button type="button" class="btn btn-primary ms-2" id="btnBorrado" data-bs-dismiss="modal"
-            (click)="deleteProd()">Confirm</button>
+            (click)="confirmarVenta()">Confirmar</button>
     </div>
 </ng-template>
 
@@ -248,7 +252,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalCenterTitle">Do you want to Delete the Product?</h5>
+                <h5 class="modal-title" id="modalCenterTitle">¿Quieres eliminar la linea de venta?</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -266,7 +270,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEdit">Do you want to Edit the Product?</h5>
+                <h5 class="modal-title" id="modalEdit">¿Quieres editar la linea de venta?</h5>
                 <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="formModal" [formGroup]="myFormReactivoProd" (ngSubmit)="onSubmitProd()">
@@ -281,15 +285,8 @@
                             <input type="number" class="form-control" id="quantity" name="quantity" placeholder="2"
                                 formControlName="quantity" />
                             <small class="text-primary"
-                                *ngIf="myFormReactivoProd.get('quantity')?.hasError('required')">Quantity
-                                is
-                                required.</small>
-                            <small class="text-primary" *ngIf="myFormReactivoProd.get('quantity')?.hasError('min')">Must
-                                be at
-                                least 1.</small>
-                            <small class="text-primary" *ngIf="myFormReactivoProd.get('quantity')?.hasError('max')">must
-                                be less
-                                than 1000.</small>
+                                *ngIf="myFormReactivoProd.get('quantity')?.hasError('required')">Cantidad es Requerida.</small>
+                            <small class="text-primary" *ngIf="myFormReactivoProd.get('quantity')?.hasError('min')">Debe ser mayor a 1.</small>
                         </div>
                     </div>
                 </div> 
@@ -297,7 +294,7 @@
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Confirm</button>
+                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Confirmar</button>
                 </div>
             </form>
         </div>
@@ -311,7 +308,7 @@
                 <h5 class="modal-title" id="exampleModalLabel2">Detalle de Pago</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="formCompra" [formGroup]="myFormReactivoPago" (ngSubmit)="onSubmitPago()">
+            <form id="formCompra" [formGroup]="myFormReactivoPago" (ngSubmit)="onSubmitPago(modalAdd)">
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-3 col-md-12">

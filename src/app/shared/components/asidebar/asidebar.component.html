@@ -44,7 +44,7 @@
                 </g>
             </svg>
         </span>
-        <span class="app-brand-text demo menu-text fw-bolder ms-2">ASJ Admin</span>
+        <span class="app-brand-text demo menu-text fw-bolder ms-2">Tu Tiendita</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -61,47 +61,17 @@
     </li>
 
     <li class="menu-header small text-uppercase">
-        <span class="menu-header-text">Pages</span>
+        <span class="menu-header-text">Pagínas</span>
     </li>
 
-    <!-- Proveedores -->
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="proveedoresHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                [ngClass]="{'text-primary': activeButton === 'providers'}" data-bs-target="#proveedoresCollapse"
-                aria-expanded="false" aria-controls="proveedoresCollapse">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Proveedores">Proveedores</div>
-            </button>
-        </h2>
-        <div id="proveedoresCollapse" class="accordion-collapse collapse" aria-labelledby="proveedoresHeading"
-            data-bs-parent="#sidebarAccordion">
-            <div class="accordion-body">
-                <ul>
-                    <li>
-                        <a routerLink="/providers/list" class="menu-link" routerLinkActive="text-primary"
-                            routerLinkActive="text-primary">
-                            <div data-i18n="Listado de Proveedores">Listado de Proveedores</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="/providers/add" class="menu-link" routerLinkActive="text-primary">
-                            <div data-i18n="Agregar Proveedor">Agregar Proveedor</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Productos/Servicios -->
+    <!-- Artículos -->
     <div class="accordion-item">
         <h2 class="accordion-header" id="productosHeading">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 [ngClass]="{'text-primary': activeButton === 'products'}" data-bs-target="#productosCollapse"
                 aria-expanded="false" aria-controls="productosCollapse">
-                <i class="menu-icon tf-icons bx bxl-product-hunt"></i>
-                <div data-i18n="Productos/Servicios">Productos/Servicios</div>
+                <i class='menu-icon tf-icons bx bxs-t-shirt'></i>
+                <div data-i18n="Artículos">Artículos</div>
             </button>
         </h2>
         <div id="productosCollapse" class="accordion-collapse collapse" aria-labelledby="productosHeading"
@@ -110,12 +80,12 @@
                 <ul>
                     <li>
                         <a routerLink="/products/list" class="menu-link" routerLinkActive="text-primary">
-                            <div data-i18n="Listado de Productos/Servicios">Listado de Productos/Servicios</div>
+                            <div data-i18n="Listado de Artículos">Listado de Artículos</div>
                         </a>
                     </li>
                     <li>
                         <a routerLink="/products/add" class="menu-link" routerLinkActive="text-primary">
-                            <div data-i18n="Agregar Productos/Servicios">Agregar Producto/Servicio</div>
+                            <div data-i18n="Agregar Artículos">Agregar Arctículo</div>
                         </a>
                     </li>
                 </ul>
@@ -123,14 +93,14 @@
         </div>
     </div>
 
-    <!-- Ordenes de Compra -->
+    <!-- Ventas -->
     <div class="accordion-item">
         <h2 class="accordion-header" id="ordenesCompraHeading">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 [ngClass]="{'text-primary': activeButton === 'orders'}" data-bs-target="#ordenesCompraCollapse"
                 aria-expanded="false" aria-controls="ordenesCompraCollapse">
                 <i class="menu-icon tf-icons bx bx-shopping-bag"></i>
-                <div data-i18n="Ordenes de Compra">Ordenes de Compra</div>
+                <div data-i18n="Ventas">Ventas</div>
             </button>
         </h2>
         <div id="ordenesCompraCollapse" class="accordion-collapse collapse" aria-labelledby="ordenesCompraHeading"
@@ -139,12 +109,12 @@
                 <ul>
                     <li>
                         <a routerLink="/orders/list" class="menu-link" routerLinkActive="text-primary">
-                            <div data-i18n="Listado de Ordenes de Compra">Listado de Ordenes de Compra</div>
+                            <div data-i18n="Listado de Ventas">Listado de Ventas</div>
                         </a>
                     </li>
                     <li>
                         <a routerLink="/orders/add" class="menu-link" routerLinkActive="text-primary">
-                            <div data-i18n="Agregar Orden de Compra">Agregar Orden de Compra</div>
+                            <div data-i18n="Agregar Orden de Compra">Agregar Venta</div>
                         </a>
                     </li>
                 </ul>

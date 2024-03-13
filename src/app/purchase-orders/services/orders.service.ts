@@ -12,7 +12,7 @@ export class OrdersService {
   
   
   
-  
+
   constructor(private http: HttpClient) { }
   
   API_URL = 'http://181.95.110.179:5198/venta'
@@ -99,7 +99,7 @@ export class OrdersService {
     return this.http.patch(this.API_URL+'/'+ventaId+'/lineaDeVenta', borrarLineaDeVenta, httpOptions);
   }
 
-  pagoEfectivo(ventaId: string, pago: number) {
+  pagoEfectivo(ventaId: string, pago: number) :Observable<any>{
     const token = localStorage.getItem('token');
 
     const httpOptions = {
@@ -112,7 +112,7 @@ export class OrdersService {
     return this.http.patch(this.API_URL+'/'+ventaId+'/pagoEfectivo', {monto: pago}, httpOptions);
   }
 
-  pagoTarjeta(ventaId: string, nuevaTarjeta: TarjetaReq) {
+  pagoTarjeta(ventaId: string, nuevaTarjeta: TarjetaReq) :Observable<any>{
     const token = localStorage.getItem('token');
 
     const httpOptions = {
@@ -125,6 +125,73 @@ export class OrdersService {
 
     console.log(nuevaTarjeta)
     return this.http.patch(this.API_URL+'/'+ventaId+'/pagoTarjeta', nuevaTarjeta, httpOptions);
+  }
+
+  asociarCliente(ventaId: string, clienteId: any) :Observable<any>{
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    return this.http.patch(this.API_URL+'/'+ventaId+'/cliente', {clienteId:clienteId}, httpOptions);
+  }
+
+  confirmarVenta(ventaId: string) :Observable<any>{
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    return this.http.patch(this.API_URL+'/'+ventaId+'/confirmar',{}, httpOptions);
+  }
+
+
+  cancelarVenta(ventaId: string) :Observable<any>{
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    return this.http.delete(this.API_URL+'/'+ventaId,httpOptions);
+  }
+
+
+  obtenerVentas() :Observable<any>{
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    return this.http.get(this.API_URL,httpOptions);
+  }
+
+  obtenerVentaId(ventaId:string) :Observable<any>{
+    const token = localStorage.getItem('token');
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    return this.http.get(this.API_URL+'/'+ventaId,httpOptions);
   }
 
   getOrders() :Observable<any>{

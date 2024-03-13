@@ -5,7 +5,7 @@ export interface Sesion{
 
 export interface PuntoDeVenta{
     id:string,
-    nombre:string,
+    numero:number,
     sucursal:Sucursal
 }
 

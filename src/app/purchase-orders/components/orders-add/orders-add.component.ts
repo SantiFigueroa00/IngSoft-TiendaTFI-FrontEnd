@@ -27,10 +27,6 @@ import { TarjetaReq } from '../../../models/TarjetaReq';
 })
 export class OrdersAddComponent  {
 
-
-
-
-
   @ViewChild('successTpl') successTpl!: TemplateRef<any>;
 
   sesion: Sesion = JSON.parse(localStorage.getItem('sesion')!);
@@ -161,15 +157,18 @@ export class OrdersAddComponent  {
       })
     }
 
-    onSubmitPago() {
+    onSubmitPago(modalAdd : TemplateRef<any>) {
       if (this.myFormReactivoPago.valid) {
         console.log('Formulario válido:', this.myFormReactivoPago.value);
         this.mapFormValuesToTarjeta();
 
         this.orderServ.pagoTarjeta(this.nuevaVenta.id,this.nuevaTarjeta).subscribe(res=>{
           console.log(res);
-          this.myFormReactivoPago.reset();
-          this.mostrarVentaActual();
+          this.orderServ.confirmarVenta(this.nuevaVenta.id).subscribe(res=>{
+            console.log(res);
+            this.myFormReactivoPago.reset();
+            this.modalService.open(modalAdd,{size:'lg'});
+          });
         });
       } else {
         console.log('form invalido:', this.myFormReactivoPago.value);
@@ -266,6 +265,11 @@ export class OrdersAddComponent  {
     const selectedValue = event.target.value;
     if (selectedValue === 'external-link') {
       this.router.navigate(['orders', 'nuevo-cliente']);
+    }else{
+      this.orderServ.asociarCliente(this.nuevaVenta.id,selectedValue).subscribe(res=>{
+        console.log(res);
+        this.mostrarVentaActual();
+      });
     }
   }
 
@@ -277,7 +281,10 @@ export class OrdersAddComponent  {
       console.log(pago);
       this.orderServ.pagoEfectivo(this.nuevaVenta.id,pago).subscribe(res=>{
         console.log(res);
-        this.modalService.open(modalAdd,{size:'lg'});
+        this.orderServ.confirmarVenta(this.nuevaVenta.id).subscribe(res=>{
+          console.log(res);
+          this.modalService.open(modalAdd,{size:'lg'});
+        });
         this.myFormReactivoEfectivo.reset();
       });
     } else {
@@ -292,5 +299,16 @@ export class OrdersAddComponent  {
     }else{
       this.myFormReactivoEfectivo.get('vuelto')?.setValue('');
     }
+  }
+
+  confirmarVenta() {
+    this.router.navigate(['orders','list']);
+  }
+
+  cancelarVenta() {
+    this.orderServ.cancelarVenta(this.nuevaVenta.id).subscribe(res=>{
+      console.log(res);
+      this.router.navigate(['orders','list']);
+    });
   }
 }
