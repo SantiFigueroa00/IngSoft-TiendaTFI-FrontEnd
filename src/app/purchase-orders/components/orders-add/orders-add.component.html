@@ -24,7 +24,7 @@
                             <label for="floatingInput" class="form-label">Search Product</label>
                             <div class="form-floating custom-input ">
                                 <input type="search" class="form-control" id="floatingInput"
-                                    placeholder="Codigo del Producto" aria-describedby="floatingInputHelp" (keyup.enter)="openModal(content)"/>
+                                    placeholder="Codigo del Producto" aria-describedby="floatingInputHelp" (keyup.enter)="openModal(content); buscarArticulo()" [(ngModel)]="filtroBusqueda"/>
                                 <label for="floatingInput"><i class="bx bx-search me-1"></i></label>
                             </div>
                             <!-- <small class="text-primary"
@@ -63,7 +63,7 @@
             <div class="card-header row">
                 <div class="col-sm-6 mt-2">
                     <h3 class="text-primary mb-1">NEW SALE</h3>
-                    <p># V-1200-EF</p>
+                    <p># {{nuevaVenta.id}}</p>
                 </div>
                 <div class="col-sm-12 mt-2">
                     <div class="row">
@@ -85,16 +85,16 @@
             <hr class="my-0" />
             <div class="card-body row">
                 <div class="col-sm-8 mt-2">
-                    <h5 class="text-primary">Factura A</h5>
+                    <h5 class="text-primary">{{nuevaVenta.tipoDeComprobante?.descripcion}}</h5>
                     <h5 class="text-primary mb-1">Cliente</h5>
-                    <p class="mb-0">Juancito Perez</p>
+                    <p class="mb-0">{{nuevaVenta.cliente?.nombre+''+nuevaVenta.cliente?.apellido}}</p>
                 </div>
                 <div class="col-sm-4 mt-2">
                     <div class="d-flex ">
                         <div>
                             <div class="d-flex align-items-baseline justify-content-sm-end">
                                 <h5 class="text-primary me-2">Fecha:</h5>
-                                <p>18/12/22</p>
+                                <p>{{nuevaVenta.creadaUtc}}</p>
                             </div>
                         </div>
                     </div>
@@ -102,30 +102,46 @@
             </div>
             <hr class="my-0" />
             <div class="card-footer">
-                <div class="table-responsive text-nowrap m-3">
-                    <table class="table  ">
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-sm">
                         <thead>
                             <tr class="text-center">
-                                <th>Code</th>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
+                                <th>Codigo</th>
+                                <th>Decripcion</th>
+                                <th>Tipo de Talle</th>
+                                <th>Medida</th>
+                                <th>Color</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
                                 <th>Subtotal</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0" id="grillaProd">
-                            <tr *ngFor="let det of productsOrder" class="text-center">
+                            <tr *ngFor="let det of nuevaVenta.lineasDeVenta" class="text-center">
                                 <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
-                                    <strong>{{det.id}}</strong>
+                                    <strong>{{det.stock.articulo.codigoArticulo}}</strong>
                                 </td>
-                                <td>{{det.name}}</td>
-                                <td>{{det.quantity}}</td>
-                                <td>{{det.price}}</td>
-                                <td>${{det.price * det.quantity}}</td>
+                                <td>{{det.stock.articulo.descripcion}}</td>
+                                <td>{{det.stock.talle.tipoTalle.descripcion}}</td>
+                                <td>{{det.stock.talle.medida}}</td>
+                                <td>{{det.stock.color.descripcion}}</td>
+                                <td>{{det.cantidad}}</td>
+                                <td>{{det.precioUnitario | currency}}</td>
+                                <td>{{det.precioUnitario * det.cantidad | currency}}</td>
+                                <td>
+                                    <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modalEdit" (click)="editProd(det)"><i
+                                            class="bx bx-edit-alt me-1"></i> Edit</button>
+                                    <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modalCenter" (click)="checkDelete(det.id)"><i
+                                            class="bx bx-trash me-1"></i> Delete</button>
+                                </td>
                             </tr>
                             <tr id="" class="bg-primary text-white">
-                                <td colspan="4" class="text-white">Total:</td>
-                                <td id="total" class="text-white text-center">${{total}}</td>
+                                <td colspan="7" class="text-white">Total:</td>
+                                <td id="total" class="text-white text-center">{{nuevaVenta.total | currency}}</td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -147,7 +163,7 @@
                 <div class="card-header row pt-0">
                     <div class="col-sm-6 mt-2">
                         <h3 class="text-primary mb-1">NEW SALE</h3>
-                        <p># V-1200-EF</p>
+                        <p># {{nuevaVenta.id}}</p>
                     </div>
                     <div class="col-sm-12 mt-2">
                         <div class="row">
@@ -170,16 +186,16 @@
                 <hr class="my-0" />
                 <div class="card-body row">
                     <div class="col-sm-8 mt-2">
-                        <h5 class="text-primary">Invoice A</h5>
-                        <h5 class="text-primary mb-1">Client</h5>
-                        <p class="mb-0">Juancito Perez</p>
+                        <h5 class="text-primary">{{nuevaVenta.tipoDeComprobante?.descripcion}}</h5>
+                        <h5 class="text-primary mb-1">Cliente</h5>
+                        <p class="mb-0">{{nuevaVenta.cliente?.nombre+''+nuevaVenta.cliente?.apellido}}</p>
                     </div>
                     <div class="col-sm-4 mt-2">
                         <div class="d-flex ">
                             <div>
                                 <div class="d-flex align-items-baseline justify-content-sm-end">
-                                    <h5 class="text-primary me-2">Date Issue:</h5>
-                                    <p>18/12/22</p>
+                                    <h5 class="text-primary me-2">Fecha:</h5>
+                                    <p>{{nuevaVenta.creadaUtc}}</p>
                                 </div>
                             </div>
                         </div>
@@ -187,30 +203,36 @@
                 </div>
                 <hr class="my-0" />
                 <div class="card-footer px-0">
-                    <div class="table-responsive text-nowrap m-3 px-0">
-                        <table class="table  ">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-sm">
                             <thead>
                                 <tr class="text-center">
-                                    <th>Code</th>
-                                    <th>Product Name</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
+                                    <th>Codigo</th>
+                                    <th>Decripcion</th>
+                                    <th>Tipo de Talle</th>
+                                    <th>Medida</th>
+                                    <th>Color</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
                                     <th>Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0" id="grillaProd">
-                                <tr *ngFor="let det of productsOrder" class="text-center">
+                                <tr *ngFor="let det of nuevaVenta.lineasDeVenta" class="text-center">
                                     <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
-                                        <strong>{{det.id}}</strong>
+                                        <strong>{{det.stock.articulo.codigoArticulo}}</strong>
                                     </td>
-                                    <td>{{det.name}}</td>
-                                    <td>{{det.quantity}}</td>
-                                    <td>{{det.price}}</td>
-                                    <td>${{det.price * det.quantity}}</td>
+                                    <td>{{det.stock.articulo.descripcion}}</td>
+                                    <td>{{det.stock.talle.tipoTalle.descripcion}}</td>
+                                    <td>{{det.stock.talle.medida}}</td>
+                                    <td>{{det.stock.color.descripcion}}</td>
+                                    <td>{{det.cantidad}}</td>
+                                    <td>{{det.precioUnitario | currency}}</td>
+                                    <td>{{det.precioUnitario * det.cantidad | currency}}</td>
                                 </tr>
                                 <tr id="" class="bg-primary text-white">
-                                    <td colspan="4" class="text-white">Total:</td>
-                                    <td id="total" class="text-white text-center">${{total}}</td>
+                                    <td colspan="7" class="text-white">Total:</td>
+                                    <td id="total" class="text-white text-center">{{nuevaVenta.total | currency}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -254,20 +276,11 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-3 col-md-6">
-                            <label for="product" class="form-label">Product</label>
-                            <select class="form-select" id="product" aria-label="Default select example"
-                                formControlName="product">
-                                <option value="">Select Product</option>
-                                <option value="{{prod.id}}" *ngFor="let prod of products">{{prod.description}}
-                                </option>
-                            </select>
-                            <small class="text-primary"
-                                *ngIf="myFormReactivoProd.get('product')?.hasError('required')">Product
-                                is
-                                required.</small>
+                            <h5 class="form-label">Descripcion del Producto</h5>
+                            <p class="form-control">{{descripArticuloEdit}}</p>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="quantity" class="form-label">Quantity</label>
+                            <label for="quantity" class="form-label">Cantidad</label>
                             <input type="number" class="form-control" id="quantity" name="quantity" placeholder="2"
                                 formControlName="quantity" />
                             <small class="text-primary"
@@ -359,10 +372,24 @@
 
 <ng-template #content let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel1">Producto</h5>
+        <h5 class="modal-title" id="exampleModalLabel1">{{articuloBusqueda.descripcion}} <span class="text-muted"> # {{articuloBusqueda.codigoArticulo}}</span></h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
+        <div class="row">
+            <div class="mb-3 col-md-6">
+                <h5>Categoria</h5>
+                <p class="form-control">{{articuloBusqueda.categoria.descripcion}}</p>
+            </div>
+            <div class="mb-3 col-md-6">
+                <h5>Marca</h5>
+                <p class="form-control">{{articuloBusqueda.marca.nombre}}</p>
+            </div>
+            <div class="mb-3 col-md-6">
+                <h5>Precio Final</h5>
+                <p class="form-control">{{articuloBusqueda.precioFinal}}</p>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -370,14 +397,18 @@
                         <th>Tipo de Talle</th>
                         <th>Talle</th>
                         <th>Color</th>
+                        <th>Cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr (dblclick)="onRowDoubleClick(); modal.close('doble click')" >
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <span class="fw-medium">AR</span></td>
-                        <td>M</td>
+                    <tr (dblclick)="onRowDoubleClick(s.id); modal.close('doble click')" *ngFor="let s of articuloBusqueda.stocks">
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <span class="fw-medium">{{s.talle.tipoTalle.descripcion}}</span></td>
+                        <td>{{s.talle.medida}}</td>
                         <td>
-                            Azul
+                            {{s.color.descripcion}}
+                        </td>
+                        <td>
+                            {{s.cantidadDisponible}}
                         </td>
                     </tr>
                 </tbody>

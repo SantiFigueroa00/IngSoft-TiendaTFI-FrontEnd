@@ -50,7 +50,8 @@ import { RegisterComponent } from './auth/components/register/register.component
     ReactiveFormsModule,
     HttpClientModule,
     ToastsContainer,
-    ToastsContainerEdit
+    ToastsContainerEdit,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
