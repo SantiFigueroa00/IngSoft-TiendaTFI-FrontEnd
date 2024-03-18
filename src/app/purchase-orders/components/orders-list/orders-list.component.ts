@@ -13,7 +13,7 @@ import { Venta } from '../../../models/Venta';
 })
 export class OrdersListComponent implements OnInit {
   
-  
+  infoString:string ='';
 
   constructor(public providerServ :ProvidersService,public orderServ : OrdersService){}
   
@@ -22,7 +22,7 @@ export class OrdersListComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderServ.obtenerVentas().subscribe(res=>{
-      this.ventas=res;
+      this.ventas=res.ventas;
     })
   }
   

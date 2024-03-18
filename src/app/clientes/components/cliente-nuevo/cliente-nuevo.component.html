@@ -32,28 +32,29 @@
                             <small class="text-primary" *ngIf="myFormReactivo.get('apellido')?.hasError('minlength')">Debe tener al menos 4 caracteres.</small>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label for="dni" class="form-label">DNI</label>
-                            <input class="form-control" type="text" id="dni" name="dni" placeholder="43258852"
-                                formControlName="dni" />
-                            <small class="text-primary" *ngIf="myFormReactivo.get('dni')?.hasError('required')">DNI es requerido.</small>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="cuil" class="form-label">CUIL</label>
-                            <input class="form-control" type="text" id="cuil" name="cuil" placeholder="27-43258852-9"
-                                formControlName="cuil" />
-                            <small class="text-primary" *ngIf="myFormReactivo.get('cuil')?.hasError('required')">CUIL es requerido.</small>
-                            <small class="text-primary"
-                                *ngIf="myFormReactivo.get('cuil')?.hasError('pattern')">Formato de CUIL incorrecto.</small>
-                        </div>            
-                        <div class="mb-3 col-md-6">
                             <label class="form-label" for="conTrib">Condicion Tributaria</label>
-                            <select id="conTrib" class="select2 form-select" formControlName="conTrib" >
+                            <select id="conTrib" class="select2 form-select" formControlName="conTrib" (change)="onChangeCondTrib()">
                                 <option value="">Seleccione Condicion Tributaria</option>
-                                <option value="{{i.id}}" *ngFor="let i of condicionesTrib">{{i.descripcion}}</option>
+                                <option *ngFor="let i of condicionesTrib" [ngValue]="i">{{i.descripcion}}</option>
                             </select>
                             <small class="text-primary"
                                 *ngIf="myFormReactivo.get('conTrib')?.hasError('required')">Condicion Tributaria es requerida.</small>
                         </div>
+                        <div class="mb-3 col-md-6" *ngIf="showDoc">
+                            <label for="numero" class="form-label">DNI</label>
+                            <input class="form-control" type="text" id="numero" name="numero" placeholder="43258852"
+                                formControlName="numero" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('numero')?.hasError('required')">DNI es requerido.</small>
+                        </div>
+                        <div class="mb-3 col-md-6" *ngIf="!showDoc">
+                            <label for="numero" class="form-label">CUIT</label>
+                            <input class="form-control" type="text" id="numero" name="numero" placeholder="27-43258852-9"
+                                formControlName="numero" />
+                            <small class="text-primary" *ngIf="myFormReactivo.get('numero')?.hasError('required')">CUIL/CUIT es requerido.</small>
+                            <small class="text-primary"
+                                *ngIf="myFormReactivo.get('numero')?.hasError('pattern')">Formato de CUIL/CUIT incorrecto.</small>
+                        </div>            
+                        
                     </div>
                     <div class="mt-2">
                         <button type="submit" class="btn btn-primary me-2">Añadir Cliente</button>
@@ -72,3 +73,6 @@
 
 
 <ng-template #invalidTpl> Invalid form, please check the fields! </ng-template>
+
+<ng-template #errorTpl> Error: {{infoError}} </ng-template>
+<app-toast-info aria-live="polite" aria-atomic="true"></app-toast-info>

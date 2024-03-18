@@ -11,8 +11,8 @@ export class ClienteService {
   
   
 
-  API_URL = 'http://181.95.110.179:5198/cliente';
-  API_TRIB = 'http://181.95.110.179:5198/condicionTributaria'
+  API_URL = 'http://181.110.214.168:5198/cliente';
+  API_TRIB = 'http://181.110.214.168:5198/condicionTributaria'
 
   constructor(private http : HttpClient) { }
 

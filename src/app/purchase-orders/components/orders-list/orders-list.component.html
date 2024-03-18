@@ -28,7 +28,7 @@
                 </thead>
                 <tbody class="table-border-bottom-0" id="grillaProv2">
                     <tr *ngFor="let v of ventas">
-                        <td class="text-center"><i class='bx bx-info-circle text-primary'
+                        <td class="text-center"><i class='btn btn-icon  bx bx-info-circle text-primary'
                                 routerLink="../detail/{{v.id}}"></i></td>
                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
                             <strong>{{v.id}}</strong>
@@ -62,3 +62,6 @@
         </div>
     </div>
 </div>
+
+<ng-template #infoTpl> {{infoString}} </ng-template>
+<app-toast-info aria-live="polite" aria-atomic="true"></app-toast-info>

@@ -28,7 +28,7 @@
                             <label for="floatingInput" class="form-label">Buscar Producto</label>
                             <div class="form-floating custom-input ">
                                 <input type="search" class="form-control" id="floatingInput"
-                                    placeholder="Codigo del Producto" aria-describedby="floatingInputHelp" (keyup.enter)="openModal(content); buscarArticulo()" [(ngModel)]="filtroBusqueda"/>
+                                    placeholder="Codigo del Producto" aria-describedby="floatingInputHelp" (keyup.enter)="buscarArticulo(content)" [(ngModel)]="filtroBusqueda"/>
                                 <label for="floatingInput"><i class="bx bx-search me-1"></i></label>
                             </div>
                             <!-- <small class="text-primary"
@@ -38,7 +38,7 @@
                         <div class="mb-3 col-md-12">
                             <label for="Client" class="form-label">Cliente</label>
                             <select class="form-select" id="Client" aria-label="Default select example"
-                                [value]="0" (change)="onSelectChange($event)">
+                                [(ngModel)]="nuevaVenta.cliente!.id" (change)="onSelectChange($event)">
                                 <option value="{{c.id}}" *ngFor="let c of clientes">{{c.nombre + ' ' + c.apellido}}</option>
                                 <hr>
                                 <option value="external-link">Nuevo Cliente...</option>
@@ -243,8 +243,8 @@
         <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Click Cancelar')">
             Cancel
         </button>
-        <button type="button" class="btn btn-primary ms-2" id="btnBorrado" data-bs-dismiss="modal"
-            (click)="confirmarVenta()">Confirmar</button>
+        <button type="button" class="btn btn-primary ms-2" id="btnBorrado" 
+            (click)="confirmarVenta();modal.close('Click Cancelar')" >Confirmar</button>
     </div>
 </ng-template>
 
@@ -364,7 +364,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Datos</button>
+                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-dismiss="modal">Guardar Datos</button>
                 </div>
             </form>
         </div>
@@ -456,3 +457,7 @@
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 <ng-template #successTpl> Purchase Order successfully created! </ng-template>
+
+<ng-template #errorTpl> Error: {{infoError}} </ng-template>
+<ng-template #infoTpl> {{infoString}} </ng-template>
+<app-toast-info aria-live="polite" aria-atomic="true"></app-toast-info>

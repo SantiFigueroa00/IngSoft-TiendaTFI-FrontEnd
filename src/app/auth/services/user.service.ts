@@ -8,7 +8,7 @@ import { LoginUser } from '../../models/LoginUser';
 })
 export class UserService {
 
-  API_URL = 'http://181.95.110.179:5198/auth/login'
+  API_URL = 'http://181.110.214.168:5198/auth/login'
 
   constructor(private http : HttpClient) { }
 

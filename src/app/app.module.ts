@@ -24,6 +24,7 @@ import { ProductsDetailComponent } from './products-services/components/products
 import { LoginComponent } from './auth/components/login/login.component';
 import { RegisterComponent } from './auth/components/register/register.component';
 import { ClienteNuevoComponent } from './clientes/components/cliente-nuevo/cliente-nuevo.component';
+import { ToastInfoComponent } from './shared/components/toast/toast-info/toast-info.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ClienteNuevoComponent } from './clientes/components/cliente-nuevo/clien
     ProductsDetailComponent,
     LoginComponent,
     RegisterComponent,
-    ClienteNuevoComponent
+    ClienteNuevoComponent,
+    ToastInfoComponent
   ],
   imports: [
     BrowserModule,

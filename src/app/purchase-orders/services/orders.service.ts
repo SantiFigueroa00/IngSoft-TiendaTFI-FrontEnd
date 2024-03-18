@@ -15,7 +15,7 @@ export class OrdersService {
 
   constructor(private http: HttpClient) { }
   
-  API_URL = 'http://181.95.110.179:5198/venta'
+  API_URL = 'http://181.110.214.168:5198/venta'
   
   
   createOrder(order: Order):Observable<any> {
@@ -43,7 +43,7 @@ export class OrdersService {
       })
     };
 
-    return this.http.get(this.API_URL,httpOptions);
+    return this.http.get(this.API_URL+'/actual',httpOptions);
   }
 
 
