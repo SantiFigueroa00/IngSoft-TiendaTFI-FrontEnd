@@ -3,7 +3,6 @@ import { OrdersService } from '../../services/orders.service';
 import { ActivatedRoute } from '@angular/router';
 import { Order } from '../../../models/Order';
 import { Provider } from '../../../models/Provider';
-import { ProvidersService } from '../../../providers/services/providers.service';
 import { Venta } from '../../../models/Venta';
 
 @Component({
@@ -29,7 +28,7 @@ export class OrdersDetailComponent implements OnInit{
   }
 
 
-  constructor(public orderServ: OrdersService, public providerServ : ProvidersService, private route: ActivatedRoute) { }
+  constructor(public orderServ: OrdersService, private route: ActivatedRoute) { }
   ngOnInit(): void {
     this.ventaId = this.route.snapshot.paramMap.get('id')!;
     console.log(this.ventaId);

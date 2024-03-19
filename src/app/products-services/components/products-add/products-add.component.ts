@@ -1,6 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProvidersService } from '../../../providers/services/providers.service';
 import { v4 as uuidv4, v4 } from 'uuid';
 import { Product } from '../../../models/Product';
 import { Provider } from '../../../models/Provider';
@@ -55,7 +54,7 @@ export class ProductsAddComponent implements OnInit{
   // REACTIVE FORM
   myFormReactivo: FormGroup;
 
-  constructor(private fb: FormBuilder, public providerServ: ProvidersService, public productServ : ProductsService, public toastServ:ToastServiceSuccess) {
+  constructor(private fb: FormBuilder, public productServ : ProductsService, public toastServ:ToastServiceSuccess) {
     this.myFormReactivo = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(4)]],
       category: ['', [Validators.required, Validators.maxLength(50)]],

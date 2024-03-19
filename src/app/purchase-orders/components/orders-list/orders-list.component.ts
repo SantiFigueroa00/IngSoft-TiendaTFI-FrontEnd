@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ProvidersService } from '../../../providers/services/providers.service';
 import { OrdersService } from '../../services/orders.service';
 import { Provider } from '../../../models/Provider';
 import { Order } from '../../../models/Order';
@@ -15,7 +14,7 @@ export class OrdersListComponent implements OnInit {
   
   infoString:string ='';
 
-  constructor(public providerServ :ProvidersService,public orderServ : OrdersService){}
+  constructor(public orderServ : OrdersService){}
   
   ventas:Venta[]=[];
   

@@ -1,6 +1,5 @@
 import { Component, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProvidersService } from '../../../providers/services/providers.service';
 import { ProductsService } from '../../../products-services/services/products.service';
 import { OrdersService } from '../../services/orders.service';
 import { ToastServiceSuccess } from '../../../shared/components/toast/toast-success/toast-service';
@@ -136,7 +135,6 @@ export class OrdersAddComponent {
 
   constructor(
     private fb: FormBuilder,
-    public providerServ: ProvidersService,
     public productServ: ProductsService,
     public orderServ: OrdersService,
     public toastServ: ToastServiceSuccess

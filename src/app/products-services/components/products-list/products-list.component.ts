@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductsService } from '../../services/products.service';
 import { v4 as uuidv4, v4 } from 'uuid';
 import { Provider } from '../../../models/Provider';
-import { ProvidersService } from '../../../providers/services/providers.service';
 import { ToastServiceEdit } from '../../../shared/components/toast/toast-edit/toast-service';
 
 @Component({
@@ -30,10 +29,6 @@ export class ProductsListComponent {
   
   idDelete?:string='';
   ngOnInit(): void {
-    this.providerServ.getProviders().subscribe((res)=>{
-      let auxProviders:Provider[] = res;
-      this.providers = auxProviders.filter(provider => provider.isDeleted === false);
-    });
     this.listProducts();
   }
   
@@ -115,7 +110,7 @@ export class ProductsListComponent {
 
   myFormReactivo: FormGroup;
 
-  constructor(private fb: FormBuilder, public providerServ: ProvidersService, public productServ : ProductsService, public toastServ:ToastServiceEdit) {
+  constructor(private fb: FormBuilder, public productServ : ProductsService, public toastServ:ToastServiceEdit) {
     this.myFormReactivo = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(4)]],
       category: ['', [Validators.required, Validators.maxLength(50)]],
